@@ -1,0 +1,2130 @@
+kaira@nithin:~$ ipython
+Python 3.6.5 |Anaconda, Inc.| (default, Apr 29 2018, 16:14:56) 
+Type 'copyright', 'credits' or 'license' for more information
+IPython 6.4.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: import pandas as pd
+
+In [2]: import numpy as np
+
+In [3]: data=pd.read_csv('/home/kaira/Desktop/spam.csv',encoding='latin-1')
+
+In [4]: data.head()
+Out[4]: 
+     v1                                                 v2 Unnamed: 2 Unnamed: 3 Unnamed: 4
+0   ham  Go until jurong point, crazy.. Available only ...        NaN        NaN        NaN
+1   ham                      Ok lar... Joking wif u oni...        NaN        NaN        NaN
+2  spam  Free entry in 2 a wkly comp to win FA Cup fina...        NaN        NaN        NaN
+3   ham  U dun say so early hor... U c already then say...        NaN        NaN        NaN
+4   ham  Nah I don't think he goes to usf, he lives aro...        NaN        NaN        NaN
+
+In [5]: from collections import Counter
+
+In [6]: ham=pd.DataFrame(data[data['v1']=='ham']['v2'])
+
+In [7]: spam=pd.DataFrame(data[data['v1']=='spam']['v2'])
+
+In [8]: ham
+Out[8]: 
+                                                     v2
+0     Go until jurong point, crazy.. Available only ...
+1                         Ok lar... Joking wif u oni...
+3     U dun say so early hor... U c already then say...
+4     Nah I don't think he goes to usf, he lives aro...
+6     Even my brother is not like to speak with me. ...
+7     As per your request 'Melle Melle (Oru Minnamin...
+10    I'm gonna be home soon and i don't want to tal...
+13    I've been searching for the right words to tha...
+14                  I HAVE A DATE ON SUNDAY WITH WILL!!
+16                           Oh k...i'm watching here:)
+17    Eh u remember how 2 spell his name... Yes i di...
+18    Fine if thatåÕs the way u feel. ThatåÕs the wa...
+20            Is that seriously how you spell his name?
+21    IÛ÷m going to try for 2 months ha ha only joking
+22    So Ì_ pay first lar... Then when is da stock c...
+23    Aft i finish my lunch then i go str down lor. ...
+24    Ffffffffff. Alright no way I can meet up with ...
+25    Just forced myself to eat a slice. I'm really ...
+26                       Lol your always so convincing.
+27    Did you catch the bus ? Are you frying an egg ...
+28    I'm back &amp; we're packing the car now, I'll...
+29    Ahhh. Work. I vaguely remember that! What does...
+30    Wait that's still not all that clear, were you...
+31    Yeah he got in at 2 and was v apologetic. n ha...
+32                        K tell me anything about you.
+33    For fear of fainting with the of all that hous...
+35    Yup... Ok i go home look at the timings then i...
+36      Oops, I'll let you know when my roommate's done
+37                         I see the letter B on my car
+38                          Anything lor... U decide...
+...                                                 ...
+5538  I can't believe how attached I am to seeing yo...
+5539                         Just sleeping..and surfing
+5541                              Yeah it's jus rite...
+5542           Armand says get your ass over to epsilon
+5543             U still havent got urself a jacket ah?
+5544  I'm taking derek &amp; taylor to walmart, if I...
+5545      Hi its in durban are you still on this number
+5546         Ic. There are a lotta childporn cars then.
+5548                 No, I was trying it all weekend ;V
+5549  You know, wot people wear. T shirts, jumpers, ...
+5550        Cool, what time you think you can get here?
+5551  Wen did you get so spiritual and deep. That's ...
+5552  Have a safe trip to Nigeria. Wish you happines...
+5553                        Hahaha..use your brain dear
+5554  Well keep in mind I've only got enough gas for...
+5555  Yeh. Indians was nice. Tho it did kane me off ...
+5556  Yes i have. So that's why u texted. Pshew...mi...
+5557  No. I meant the calculation is the same. That ...
+5558                             Sorry, I'll call later
+5559  if you aren't here in the next  &lt;#&gt;  hou...
+5560                  Anything lor. Juz both of us lor.
+5561  Get me out of this dump heap. My mom decided t...
+5562  Ok lor... Sony ericsson salesman... I ask shuh...
+5563                                Ard 6 like dat lor.
+5564  Why don't you wait 'til at least wednesday to ...
+5565                                       Huh y lei...
+5568              Will Ì_ b going to esplanade fr home?
+5569  Pity, * was in mood for that. So...any other s...
+5570  The guy did some bitching but I acted like i'd...
+5571                         Rofl. Its true to its name
+
+[4825 rows x 1 columns]
+
+In [9]: ham=Counter(" ".join(ham['v2']).split()).most_common(20)
+
+In [10]: ham
+Out[10]: 
+[('to', 1530),
+ ('you', 1458),
+ ('I', 1436),
+ ('the', 1019),
+ ('a', 969),
+ ('and', 738),
+ ('i', 736),
+ ('in', 734),
+ ('u', 645),
+ ('is', 638),
+ ('my', 619),
+ ('me', 537),
+ ('of', 498),
+ ('for', 475),
+ ('that', 398),
+ ('it', 375),
+ ('your', 373),
+ ('on', 352),
+ ('have', 346),
+ ('at', 333)]
+
+In [11]: ham=pd.DataFrame(ham)
+
+In [12]: ham
+Out[12]: 
+       0     1
+0     to  1530
+1    you  1458
+2      I  1436
+3    the  1019
+4      a   969
+5    and   738
+6      i   736
+7     in   734
+8      u   645
+9     is   638
+10    my   619
+11    me   537
+12    of   498
+13   for   475
+14  that   398
+15    it   375
+16  your   373
+17    on   352
+18  have   346
+19    at   333
+
+In [13]: ham.rename(columns={0:'words',1:'count'},inplace=True)
+
+In [14]: import matplotlib.pyplot as plt
+
+In [15]: ham.plot.bar(legend=False)
+Out[15]: <matplotlib.axes._subplots.AxesSubplot at 0x7fbaa8f14550>
+
+In [16]: plt.xticks(range(20),ham['words'])
+Out[16]: 
+([<matplotlib.axis.XTick at 0x7fbaa8f26d68>,
+  <matplotlib.axis.XTick at 0x7fbaa8f266a0>,
+  <matplotlib.axis.XTick at 0x7fbaa8c67fd0>,
+  <matplotlib.axis.XTick at 0x7fbaa8c67d68>,
+  <matplotlib.axis.XTick at 0x7fbaa8c774e0>,
+  <matplotlib.axis.XTick at 0x7fbaa8c779b0>,
+  <matplotlib.axis.XTick at 0x7fbaa8c77e80>,
+  <matplotlib.axis.XTick at 0x7fbaa8c7f390>,
+  <matplotlib.axis.XTick at 0x7fbaa8c77630>,
+  <matplotlib.axis.XTick at 0x7fbaa8cb2978>,
+  <matplotlib.axis.XTick at 0x7fbaa8c7f358>,
+  <matplotlib.axis.XTick at 0x7fbaa8f263c8>,
+  <matplotlib.axis.XTick at 0x7fbaa8c1b470>,
+  <matplotlib.axis.XTick at 0x7fbaa8c1b940>,
+  <matplotlib.axis.XTick at 0x7fbaa8c1be10>,
+  <matplotlib.axis.XTick at 0x7fbaa8c21320>,
+  <matplotlib.axis.XTick at 0x7fbaa8c217f0>,
+  <matplotlib.axis.XTick at 0x7fbaa8c21cc0>,
+  <matplotlib.axis.XTick at 0x7fbaa8c2a1d0>,
+  <matplotlib.axis.XTick at 0x7fbaa8c21898>],
+ <a list of 20 Text xticklabel objects>)
+
+In [17]: plt.xlabel('words')
+Out[17]: Text(0.5,0,'words')
+
+In [18]: plt.ylabel('count')
+Out[18]: Text(0,0.5,'count')
+
+In [19]: plt.show()
+
+In [20]: spam
+Out[20]: 
+                                                     v2
+2     Free entry in 2 a wkly comp to win FA Cup fina...
+5     FreeMsg Hey there darling it's been 3 week's n...
+8     WINNER!! As a valued network customer you have...
+9     Had your mobile 11 months or more? U R entitle...
+11    SIX chances to win CASH! From 100 to 20,000 po...
+12    URGENT! You have won a 1 week FREE membership ...
+15    XXXMobileMovieClub: To use your credit, click ...
+19    England v Macedonia - dont miss the goals/team...
+34    Thanks for your subscription to Ringtone UK yo...
+42    07732584351 - Rodger Burns - MSG = We tried to...
+54    SMS. ac Sptv: The New Jersey Devils and the De...
+56    Congrats! 1 year special cinema pass for 2 is ...
+65    As a valued customer, I am pleased to advise y...
+67    Urgent UR awarded a complimentary trip to Euro...
+68    Did you hear about the new \Divorce Barbie\"? ...
+93    Please call our customer service representativ...
+95    Your free ringtone is waiting to be collected....
+113   GENT! We are trying to contact you. Last weeke...
+116   You are a winner U have been specially selecte...
+119   PRIVATE! Your 2004 Account Statement for 07742...
+120   URGENT! Your Mobile No. was awarded å£2000 Bon...
+122   Todays Voda numbers ending 7548 are selected t...
+133   Sunshine Quiz Wkly Q! Win a top Sony DVD playe...
+134   Want 2 get laid tonight? Want real Dogging loc...
+138   You'll not rcv any more msgs from the chat svc...
+146   FreeMsg Why haven't you replied to my text? I'...
+158   Customer service annoncement. You have a New Y...
+159   You are a winner U have been specially selecte...
+163   -PLS STOP bootydelious (32/F) is inviting you ...
+164   BangBabes Ur order is on the way. U SHOULD rec...
+...                                                 ...
+5342  u r subscribed 2 TEXTCOMP 250 wkly comp. 1st w...
+5364  Call 09095350301 and send our girls into eroti...
+5365  Camera - You are awarded a SiPix Digital Camer...
+5366  A å£400 XMAS REWARD IS WAITING FOR YOU! Our co...
+5368  IMPORTANT MESSAGE. This is a final contact att...
+5370  dating:i have had two of these. Only started a...
+5377  The current leading bid is 151. To pause this ...
+5378  Free entry to the gr8prizes wkly comp 4 a chan...
+5381         You have 1 new message. Call 0207-083-6089
+5427  Santa Calling! Would your little ones like a c...
+5443  You have won a guaranteed 32000 award or maybe...
+5449  Latest News! Police station toilet stolen, cop...
+5456  \For the most sparkling shopping breaks from 4...
+5460  December only! Had your mobile 11mths+? You ar...
+5462  Txt: CALL to No: 86888 & claim your reward of ...
+5466  http//tms. widelive.com/index. wml?id=820554ad...
+5467  Get your garden ready for summer with a FREE s...
+5468  URGENT! Last weekend's draw shows that you hav...
+5482  URGENT We are trying to contact you Last weeke...
+5487  2p per min to call Germany 08448350055 from yo...
+5492  Marvel Mobile Play the official Ultimate Spide...
+5497  SMS SERVICES. for your inclusive text credits,...
+5501  PRIVATE! Your 2003 Account Statement for 07808...
+5524  You are awarded a SiPix Digital Camera! call 0...
+5526  PRIVATE! Your 2003 Account Statement for shows...
+5537  Want explicit SEX in 30 secs? Ring 02073162414...
+5540  ASKED 3MOBILE IF 0870 CHATLINES INCLU IN FREE ...
+5547  Had your contract mobile 11 Mnths? Latest Moto...
+5566  REMINDER FROM O2: To get 2.50 pounds free call...
+5567  This is the 2nd time we have tried 2 contact u...
+
+[747 rows x 1 columns]
+
+In [21]: spam=Counter(" ".join(ok['v2']).split()).most_common(20)
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-21-8a1aa01b1784> in <module>()
+----> 1 spam=Counter(" ".join(ok['v2']).split()).most_common(20)
+
+NameError: name 'ok' is not defined
+
+In [22]: spam=Counter(" ".join(spam['v2']).split()).most_common(20)
+
+In [23]: spam
+Out[23]: 
+[('to', 604),
+ ('a', 358),
+ ('your', 187),
+ ('call', 185),
+ ('or', 185),
+ ('the', 178),
+ ('2', 169),
+ ('for', 169),
+ ('you', 164),
+ ('is', 143),
+ ('Call', 136),
+ ('on', 135),
+ ('have', 128),
+ ('and', 119),
+ ('from', 116),
+ ('ur', 107),
+ ('with', 101),
+ ('&', 98),
+ ('4', 93),
+ ('of', 93)]
+
+In [24]: spam=pd.DataFrame(spam)
+
+In [25]: spam
+Out[25]: 
+       0    1
+0     to  604
+1      a  358
+2   your  187
+3   call  185
+4     or  185
+5    the  178
+6      2  169
+7    for  169
+8    you  164
+9     is  143
+10  Call  136
+11    on  135
+12  have  128
+13   and  119
+14  from  116
+15    ur  107
+16  with  101
+17     &   98
+18     4   93
+19    of   93
+
+In [26]: spam.rename(columns={0:'words',1:'count'},inplace=True)
+
+In [27]: spam
+Out[27]: 
+   words  count
+0     to    604
+1      a    358
+2   your    187
+3   call    185
+4     or    185
+5    the    178
+6      2    169
+7    for    169
+8    you    164
+9     is    143
+10  Call    136
+11    on    135
+12  have    128
+13   and    119
+14  from    116
+15    ur    107
+16  with    101
+17     &     98
+18     4     93
+19    of     93
+
+In [28]: spam.plot.bar(legend=False)
+Out[28]: <matplotlib.axes._subplots.AxesSubplot at 0x7fbaa2d64d68>
+
+In [29]: plt.xticks(range(20),spam['words'])
+Out[29]: 
+([<matplotlib.axis.XTick at 0x7fbaa2cbc588>,
+  <matplotlib.axis.XTick at 0x7fbaa2d5acf8>,
+  <matplotlib.axis.XTick at 0x7fbaa2c9afd0>,
+  <matplotlib.axis.XTick at 0x7fbaa2d46710>,
+  <matplotlib.axis.XTick at 0x7fbaa2d46c88>,
+  <matplotlib.axis.XTick at 0x7fbaa2d36198>,
+  <matplotlib.axis.XTick at 0x7fbaa2d465f8>,
+  <matplotlib.axis.XTick at 0x7fbaa2d36518>,
+  <matplotlib.axis.XTick at 0x7fbaa2d36ac8>,
+  <matplotlib.axis.XTick at 0x7fbaa2d36e80>,
+  <matplotlib.axis.XTick at 0x7fbaa2d34320>,
+  <matplotlib.axis.XTick at 0x7fbaa2d5a748>,
+  <matplotlib.axis.XTick at 0x7fbaa2d24240>,
+  <matplotlib.axis.XTick at 0x7fbaa2d249e8>,
+  <matplotlib.axis.XTick at 0x7fbaa2d24f28>,
+  <matplotlib.axis.XTick at 0x7fbaa2d1d208>,
+  <matplotlib.axis.XTick at 0x7fbaa2d1d6d8>,
+  <matplotlib.axis.XTick at 0x7fbaa2d1dcc0>,
+  <matplotlib.axis.XTick at 0x7fbaa2d152e8>,
+  <matplotlib.axis.XTick at 0x7fbaa2d1ddd8>],
+ <a list of 20 Text xticklabel objects>)
+
+In [30]: plt.xlabel('words')
+Out[30]: Text(0.5,0,'words')
+
+In [31]: plt.ylabel('count')
+Out[31]: Text(0,0.5,'count')
+
+In [32]: plt.show()
+
+In [33]: from sklearn.feature_extraction.text import CountVectorizer
+
+In [34]: vec=CountVectorizer(stop_words='english')
+
+In [35]: X=fit_transform(data['v2'])
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-35-4fccac43361f> in <module>()
+----> 1 X=fit_transform(data['v2'])
+
+NameError: name 'fit_transform' is not defined
+
+In [36]: X=vec.fit_transform(data['v2'])
+
+In [37]: vec.get_feature_names()
+Out[37]: 
+['00',
+ '000',
+ '000pes',
+ '008704050406',
+ '0089',
+ '0121',
+ '01223585236',
+ '01223585334',
+ '0125698789',
+ '02',
+ '0207',
+ '02072069400',
+ '02073162414',
+ '02085076972',
+ '021',
+ '03',
+ '04',
+ '0430',
+ '05',
+ '050703',
+ '0578',
+ '06',
+ '07',
+ '07008009200',
+ '07046744435',
+ '07090201529',
+ '07090298926',
+ '07099833605',
+ '07123456789',
+ '0721072',
+ '07732584351',
+ '07734396839',
+ '07742676969',
+ '07753741225',
+ '0776xxxxxxx',
+ '07781482378',
+ '07786200117',
+ '077xxx',
+ '078',
+ '07801543489',
+ '07808',
+ '07808247860',
+ '07808726822',
+ '07815296484',
+ '07821230901',
+ '078498',
+ '07880867867',
+ '0789xxxxxxx',
+ '07946746291',
+ '0796xxxxxx',
+ '07973788240',
+ '07xxxxxxxxx',
+ '08',
+ '0800',
+ '08000407165',
+ '08000776320',
+ '08000839402',
+ '08000930705',
+ '08000938767',
+ '08001950382',
+ '08002888812',
+ '08002986030',
+ '08002986906',
+ '08002988890',
+ '08006344447',
+ '0808',
+ '08081263000',
+ '08081560665',
+ '0825',
+ '083',
+ '0844',
+ '08448350055',
+ '08448714184',
+ '0845',
+ '08450542832',
+ '08452810071',
+ '08452810073',
+ '08452810075over18',
+ '0870',
+ '08700435505150p',
+ '08700469649',
+ '08700621170150p',
+ '08701213186',
+ '08701237397',
+ '08701417012',
+ '08701417012150p',
+ '0870141701216',
+ '087016248',
+ '08701752560',
+ '087018728737',
+ '0870241182716',
+ '08702490080',
+ '08702840625',
+ '08704050406',
+ '08704439680',
+ '08704439680ts',
+ '08706091795',
+ '0870737910216yrs',
+ '08707500020',
+ '08707509020',
+ '0870753331018',
+ '08707808226',
+ '08708034412',
+ '08708800282',
+ '08709222922',
+ '08709501522',
+ '0871',
+ '087104711148',
+ '08712101358',
+ '08712103738',
+ '0871212025016',
+ '08712300220',
+ '087123002209am',
+ '08712317606',
+ '08712400200',
+ '08712400602450p',
+ '08712400603',
+ '08712402050',
+ '08712402578',
+ '08712402779',
+ '08712402902',
+ '08712402972',
+ '08712404000',
+ '08712405020',
+ '08712405022',
+ '08712460324',
+ '08712466669',
+ '0871277810710p',
+ '0871277810810',
+ '0871277810910p',
+ '08714342399',
+ '087147123779am',
+ '08714712379',
+ '08714712388',
+ '08714712394',
+ '08714712412',
+ '08714714011',
+ '08715203028',
+ '08715203649',
+ '08715203652',
+ '08715203656',
+ '08715203677',
+ '08715203685',
+ '08715203694',
+ '08715205273',
+ '08715500022',
+ '08715705022',
+ '08717111821',
+ '08717168528',
+ '08717205546',
+ '0871750',
+ '08717507382',
+ '08717509990',
+ '08717890890å',
+ '08717895698',
+ '08717898035',
+ '08718711108',
+ '08718720201',
+ '08718723815',
+ '08718725756',
+ '08718726270',
+ '087187262701',
+ '08718726970',
+ '08718726971',
+ '08718726978',
+ '087187272008',
+ '08718727868',
+ '08718727870',
+ '08718727870150ppm',
+ '08718730555',
+ '08718730666',
+ '08718738001',
+ '08718738002',
+ '08718738034',
+ '08719180219',
+ '08719180248',
+ '08719181259',
+ '08719181503',
+ '08719181513',
+ '08719839835',
+ '08719899217',
+ '08719899229',
+ '08719899230',
+ '09',
+ '09041940223',
+ '09050000301',
+ '09050000332',
+ '09050000460',
+ '09050000555',
+ '09050000878',
+ '09050000928',
+ '09050001295',
+ '09050001808',
+ '09050002311',
+ '09050003091',
+ '09050005321',
+ '09050090044',
+ '09050280520',
+ '09053750005',
+ '09056242159',
+ '09057039994',
+ '09058091854',
+ '09058091870',
+ '09058094454',
+ '09058094455',
+ '09058094507',
+ '09058094565',
+ '09058094583',
+ '09058094594',
+ '09058094597',
+ '09058094599',
+ '09058095107',
+ '09058095201',
+ '09058097189',
+ '09058097218',
+ '09058098002',
+ '09058099801',
+ '09061104276',
+ '09061104283',
+ '09061209465',
+ '09061213237',
+ '09061221061',
+ '09061221066',
+ '09061701444',
+ '09061701461',
+ '09061701851',
+ '09061701939',
+ '09061702893',
+ '09061743386',
+ '09061743806',
+ '09061743810',
+ '09061743811',
+ '09061744553',
+ '09061749602',
+ '09061790121',
+ '09061790125',
+ '09061790126',
+ '09063440451',
+ '09063442151',
+ '09063458130',
+ '0906346330',
+ '09064011000',
+ '09064012103',
+ '09064012160',
+ '09064015307',
+ '09064017295',
+ '09064017305',
+ '09064018838',
+ '09064019014',
+ '09064019788',
+ '09065069120',
+ '09065069154',
+ '09065171142',
+ '09065174042',
+ '09065394514',
+ '09065394973',
+ '09065989180',
+ '09065989182',
+ '09066350750',
+ '09066358152',
+ '09066358361',
+ '09066361921',
+ '09066362206',
+ '09066362220',
+ '09066362231',
+ '09066364311',
+ '09066364349',
+ '09066364589',
+ '09066368327',
+ '09066368470',
+ '09066368753',
+ '09066380611',
+ '09066382422',
+ '09066612661',
+ '09066649731from',
+ '09066660100',
+ '09071512432',
+ '09071512433',
+ '09071517866',
+ '09077818151',
+ '09090204448',
+ '09090900040',
+ '09094100151',
+ '09094646631',
+ '09094646899',
+ '09095350301',
+ '09096102316',
+ '09099725823',
+ '09099726395',
+ '09099726429',
+ '09099726481',
+ '09099726553',
+ '09111030116',
+ '09111032124',
+ '09701213186',
+ '0a',
+ '0quit',
+ '10',
+ '100',
+ '1000',
+ '1000call',
+ '1000s',
+ '100p',
+ '100percent',
+ '100txt',
+ '1013',
+ '1030',
+ '10am',
+ '10k',
+ '10p',
+ '10ppm',
+ '10th',
+ '11',
+ '1120',
+ '113',
+ '1131',
+ '114',
+ '116',
+ '1172',
+ '118p',
+ '11mths',
+ '11pm',
+ '12',
+ '1205',
+ '120p',
+ '121',
+ '1225',
+ '123',
+ '125',
+ '1250',
+ '125gift',
+ '128',
+ '12hours',
+ '12hrs',
+ '12mths',
+ '13',
+ '130',
+ '1327',
+ '139',
+ '14',
+ '140',
+ '1405',
+ '140ppm',
+ '145',
+ '1450',
+ '146tf150p',
+ '14tcr',
+ '14thmarch',
+ '15',
+ '150',
+ '1500',
+ '150p',
+ '150p16',
+ '150pm',
+ '150ppermesssubscription',
+ '150ppm',
+ '150ppmpobox10183bhamb64xe',
+ '150ppmsg',
+ '150pw',
+ '151',
+ '153',
+ '15541',
+ '15pm',
+ '16',
+ '165',
+ '1680',
+ '169',
+ '177',
+ '18',
+ '180',
+ '1843',
+ '18p',
+ '18yrs',
+ '195',
+ '1956669',
+ '1apple',
+ '1b6a5ecef91ff9',
+ '1cup',
+ '1da',
+ '1er',
+ '1hr',
+ '1im',
+ '1lemon',
+ '1mega',
+ '1million',
+ '1pm',
+ '1st',
+ '1st4terms',
+ '1stchoice',
+ '1stone',
+ '1thing',
+ '1tulsi',
+ '1win150ppmx3',
+ '1winaweek',
+ '1winawk',
+ '1x150p',
+ '1yf',
+ '20',
+ '200',
+ '2000',
+ '2003',
+ '2004',
+ '2005',
+ '2006',
+ '2007',
+ '200p',
+ '2025050',
+ '20m12aq',
+ '20p',
+ '21',
+ '21870000',
+ '21st',
+ '22',
+ '220',
+ '220cm2',
+ '2309',
+ '23f',
+ '23g',
+ '24',
+ '24hrs',
+ '24m',
+ '24th',
+ '25',
+ '250',
+ '250k',
+ '255',
+ '25p',
+ '26',
+ '2667',
+ '26th',
+ '27',
+ '28',
+ '2814032',
+ '28days',
+ '28th',
+ '28thfeb',
+ '29',
+ '2b',
+ '2bold',
+ '2c',
+ '2channel',
+ '2day',
+ '2end',
+ '2exit',
+ '2ez',
+ '2find',
+ '2getha',
+ '2geva',
+ '2go',
+ '2gthr',
+ '2hrs',
+ '2kbsubject',
+ '2lands',
+ '2marrow',
+ '2moro',
+ '2morow',
+ '2morro',
+ '2morrow',
+ '2morrowxxxx',
+ '2mro',
+ '2mrw',
+ '2nd',
+ '2nhite',
+ '2nights',
+ '2nite',
+ '2optout',
+ '2p',
+ '2price',
+ '2px',
+ '2rcv',
+ '2stop',
+ '2stoptx',
+ '2stoptxt',
+ '2u',
+ '2u2',
+ '2waxsto',
+ '2wks',
+ '2wt',
+ '2wu',
+ '2years',
+ '2yr',
+ '2yrs',
+ '30',
+ '300',
+ '3000',
+ '300603',
+ '300603t',
+ '300p',
+ '3030',
+ '30apr',
+ '30ish',
+ '30pm',
+ '30pp',
+ '30s',
+ '30th',
+ '31',
+ '3100',
+ '310303',
+ '31p',
+ '32',
+ '32000',
+ '3230',
+ '32323',
+ '326',
+ '33',
+ '330',
+ '350',
+ '3510i',
+ '35p',
+ '3650',
+ '36504',
+ '3680',
+ '373',
+ '3750',
+ '37819',
+ '38',
+ '382',
+ '391784',
+ '3aj',
+ '3d',
+ '3days',
+ '3g',
+ '3gbp',
+ '3hrs',
+ '3lions',
+ '3lp',
+ '3miles',
+ '3mins',
+ '3mobile',
+ '3optical',
+ '3pound',
+ '3qxj9',
+ '3rd',
+ '3ss',
+ '3uz',
+ '3wks',
+ '3xx',
+ '3xå',
+ '40',
+ '400',
+ '400mins',
+ '400thousad',
+ '402',
+ '4041',
+ '40411',
+ '40533',
+ '40gb',
+ '40mph',
+ '41685',
+ '41782',
+ '420',
+ '42049',
+ '4217',
+ '42478',
+ '42810',
+ '430',
+ '434',
+ '44',
+ '440',
+ '4403ldnw1a7rw18',
+ '44345',
+ '447797706009',
+ '447801259231',
+ '448712404000',
+ '449050000301',
+ '449071512431',
+ '45',
+ '450',
+ '450p',
+ '450pw',
+ '45239',
+ '45pm',
+ '47',
+ '4719',
+ '4742',
+ '47per',
+ '48',
+ '4882',
+ '48922',
+ '49',
+ '49557',
+ '4a',
+ '4d',
+ '4eva',
+ '4few',
+ '4fil',
+ '4get',
+ '4give',
+ '4got',
+ '4goten',
+ '4info',
+ '4jx',
+ '4msgs',
+ '4mths',
+ '4qf2',
+ '4t',
+ '4th',
+ '4the',
+ '4thnov',
+ '4txt',
+ '4u',
+ '4utxt',
+ '4w',
+ '4ward',
+ '4wrd',
+ '4xx26',
+ '4years',
+ '50',
+ '500',
+ '5000',
+ '505060',
+ '50award',
+ '50ea',
+ '50gbp',
+ '50p',
+ '50perweeksub',
+ '50perwksub',
+ '50pm',
+ '50pmmorefrommobile2bremoved',
+ '50ppm',
+ '50rcvd',
+ '50s',
+ '515',
+ '5226',
+ '523',
+ '526',
+ '528',
+ '530',
+ '54',
+ '542',
+ '545',
+ '5digital',
+ '5free',
+ '5ish',
+ '5k',
+ '5min',
+ '5mls',
+ '5p',
+ '5pm',
+ '5th',
+ '5wb',
+ '5we',
+ '5wkg',
+ '5wq',
+ '5years',
+ '60',
+ '600',
+ '6031',
+ '6089',
+ '60p',
+ '61',
+ '61200',
+ '61610',
+ '62220cncl',
+ '6230',
+ '62468',
+ '62735',
+ '630',
+ '63miles',
+ '645',
+ '65',
+ '650',
+ '66',
+ '6669',
+ '674',
+ '67441233',
+ '68866',
+ '69101',
+ '69200',
+ '69669',
+ '69696',
+ '69698',
+ '69855',
+ '69866',
+ '69876',
+ '69888',
+ '69888nyt',
+ '69911',
+ '69969',
+ '69988',
+ '6days',
+ '6hl',
+ '6hrs',
+ '6ish',
+ '6missed',
+ '6months',
+ '6ph',
+ '6pm',
+ '6th',
+ '6times',
+ '6wu',
+ '6zf',
+ '700',
+ '71',
+ '7250',
+ '7250i',
+ '730',
+ '731',
+ '74355',
+ '75',
+ '750',
+ '7548',
+ '75max',
+ '762',
+ '7634',
+ '7684',
+ '77',
+ '7732584351',
+ '78',
+ '786',
+ '7876150ppm',
+ '79',
+ '7am',
+ '7cfca1a',
+ '7ish',
+ '7mp',
+ '7oz',
+ '7pm',
+ '7th',
+ '7ws',
+ '7zs',
+ '80',
+ '800',
+ '8000930705',
+ '80062',
+ '8007',
+ '80082',
+ '80086',
+ '80122300p',
+ '80155',
+ '80160',
+ '80182',
+ '8027',
+ '80488',
+ '80608',
+ '8077',
+ '80878',
+ '81010',
+ '81151',
+ '81303',
+ '81618',
+ '82050',
+ '820554ad0a1705572711',
+ '82242',
+ '82277',
+ '82324',
+ '82468',
+ '83021',
+ '83039',
+ '83049',
+ '83110',
+ '83118',
+ '83222',
+ '83332',
+ '83338',
+ '83355',
+ '83370',
+ '83383',
+ '83435',
+ '83600',
+ '83738',
+ '84',
+ '84025',
+ '84122',
+ '84128',
+ '84199',
+ '84484',
+ '85',
+ '850',
+ '85023',
+ '85069',
+ '85222',
+ '85233',
+ '8552',
+ '85555',
+ '86021',
+ '861',
+ '864233',
+ '86688',
+ '86888',
+ '87021',
+ '87066',
+ '87070',
+ '87077',
+ '87121',
+ '87131',
+ '8714714',
+ '872',
+ '87239',
+ '87575',
+ '8800',
+ '88039',
+ '88066',
+ '88088',
+ '88222',
+ '88600',
+ '88800',
+ '8883',
+ '88877',
+ '88888',
+ '89034',
+ '89070',
+ '89080',
+ '89105',
+ '89123',
+ '89545',
+ '89555',
+ '89693',
+ '89938',
+ '8am',
+ '8ball',
+ '8lb',
+ '8p',
+ '8pm',
+ '8th',
+ '8wp',
+ '900',
+ '9061100010',
+ '910',
+ '9153',
+ '9280114',
+ '930',
+ '9307622',
+ '945',
+ '946',
+ '95',
+ '9755',
+ '9758',
+ '97n7qp',
+ '98321561',
+ '99',
+ '9996',
+ '9ae',
+ '9am',
+ '9ja',
+ '9pm',
+ '9t',
+ '9th',
+ '9yt',
+ '____',
+ 'a21',
+ 'a30',
+ 'aa',
+ 'aah',
+ 'aaniye',
+ 'aaooooright',
+ 'aathi',
+ 'ab',
+ 'abbey',
+ 'abdomen',
+ 'abeg',
+ 'abel',
+ 'aberdeen',
+ 'abi',
+ 'ability',
+ 'abiola',
+ 'abj',
+ 'able',
+ 'abnormally',
+ 'aboutas',
+ 'abroad',
+ 'absence',
+ 'absolutely',
+ 'absolutly',
+ 'abstract',
+ 'abt',
+ 'abta',
+ 'aburo',
+ 'abuse',
+ 'abusers',
+ 'ac',
+ 'academic',
+ 'acc',
+ 'accent',
+ 'accenture',
+ 'accept',
+ 'access',
+ 'accessible',
+ 'accidant',
+ 'accident',
+ 'accidentally',
+ 'accommodation',
+ 'accommodationvouchers',
+ 'accomodate',
+ 'accomodations',
+ 'accordin',
+ 'accordingly',
+ 'account',
+ 'accounting',
+ 'accounts',
+ 'accumulation',
+ 'achan',
+ 'ache',
+ 'achieve',
+ 'acid',
+ 'acknowledgement',
+ 'acl03530150pm',
+ 'acnt',
+ 'aco',
+ 'act',
+ 'acted',
+ 'actin',
+ 'acting',
+ 'action',
+ 'activ8',
+ 'activate',
+ 'active',
+ 'activities',
+ 'actor',
+ 'actual',
+ 'actually',
+ 'ad',
+ 'adam',
+ 'add',
+ 'addamsfa',
+ 'added',
+ 'addicted',
+ 'addie',
+ 'adding',
+ 'address',
+ 'adds',
+ 'adewale',
+ 'adi',
+ 'adjustable',
+ 'admin',
+ 'administrator',
+ 'admirer',
+ 'admission',
+ 'admit',
+ 'adore',
+ 'adoring',
+ 'adp',
+ 'adress',
+ 'adrian',
+ 'ads',
+ 'adsense',
+ 'adult',
+ 'adults',
+ 'advance',
+ 'adventure',
+ 'adventuring',
+ 'advice',
+ 'advise',
+ 'advising',
+ 'advisors',
+ 'aeronautics',
+ 'aeroplane',
+ 'afew',
+ 'affair',
+ 'affairs',
+ 'affection',
+ 'affectionate',
+ 'affections',
+ 'affidavit',
+ 'afford',
+ 'afghanistan',
+ 'afraid',
+ 'africa',
+ 'african',
+ 'aft',
+ 'afternon',
+ 'afternoon',
+ 'afternoons',
+ 'aftr',
+ 'ag',
+ 'agalla',
+ 'age',
+ 'age16',
+ 'age23',
+ 'agency',
+ 'agent',
+ 'agents',
+ 'ages',
+ 'agidhane',
+ 'aging',
+ 'ago',
+ 'agree',
+ 'ah',
+ 'aha',
+ 'ahead',
+ 'ahhh',
+ 'ahhhh',
+ 'ahmad',
+ 'ahold',
+ 'aid',
+ 'aids',
+ 'aig',
+ 'aight',
+ 'ain',
+ 'aint',
+ 'air',
+ 'air1',
+ 'airport',
+ 'airtel',
+ 'aiya',
+ 'aiyah',
+ 'aiyar',
+ 'aiyo',
+ 'ajith',
+ 'ak',
+ ...]
+
+In [38]: X.toarray()
+Out[38]: 
+array([[0, 0, 0, ..., 0, 0, 0],
+       [0, 0, 0, ..., 0, 0, 0],
+       [0, 0, 0, ..., 0, 0, 0],
+       ...,
+       [0, 0, 0, ..., 0, 0, 0],
+       [0, 0, 0, ..., 0, 0, 0],
+       [0, 0, 0, ..., 0, 0, 0]], dtype=int64)
+
+In [39]: X
+Out[39]: 
+<5572x8404 sparse matrix of type '<class 'numpy.int64'>'
+	with 43478 stored elements in Compressed Sparse Row format>
+
+In [40]: from sklearn.model_selection import train_test_split
+
+In [41]: X_train,X_test,y_train,y_test=train_test_split(X,data['v1'].map({'ham':0,'spam':1}),random_state=0,test_size=0.2)
+
+In [42]: from sklearn import naive_bayes
+
+In [43]: alpha_list=np.arange(1/100000,20,0.11)
+
+In [44]: test_score=np.zeros(len(alpha_list))
+
+In [45]: train_score=np.zeros(len(alpha_list))
+
+In [46]: recall_score=np.zeros(len(alpha_list))
+
+In [47]: precision_score=np.zeros(len(alpha_list))
+
+In [48]: from sklearn import metrics
+
+In [49]: count=0
+
+In [50]: for alpha in list_alpha:
+    ...:     model=naive_bayes.MultinomialNB(alpha=alpha)
+    ...:     model.fit(X_train,y_train)
+    ...:     test_score=model.score(X_test,y_test)
+    ...:     train_score=model.score(X_train,y_train)
+    ...:     recall_score=metrics.recall_score(y_test,model.predict(X_test))
+    ...:     precision_score=metrics.recall_score(y_test,model.predict(X_test))
+    ...:     
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-50-830bcd34f2aa> in <module>()
+----> 1 for alpha in list_alpha:
+      2     model=naive_bayes.MultinomialNB(alpha=alpha)
+      3     model.fit(X_train,y_train)
+      4     test_score=model.score(X_test,y_test)
+      5     train_score=model.score(X_train,y_train)
+
+NameError: name 'list_alpha' is not defined
+
+In [51]: for alpha in alpha_list:
+    ...:     model=naive_bayes.MultinomialNB(alpha=alpha)
+    ...:     model.fit(X_train,y_train)
+    ...:     test_score=model.score(X_test,y_test)
+    ...:     train_score=model.score(X_train,y_train)
+    ...:     recall_score=metrics.recall_score(y_test,model.predict(X_test))
+    ...:     precision_score=metrics.recall_score(y_test,model.predict(X_test))
+    ...:     
+
+In [52]: matrix=np.matrix(np.c_(['alpha_list','train_score','test_score','recall_score','precision_score']))
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-52-fe3c7fbf10ec> in <module>()
+----> 1 matrix=np.matrix(np.c_(['alpha_list','train_score','test_score','recall_score','precision_score']))
+
+TypeError: 'CClass' object is not callable
+
+In [53]: matrix=np.matrix(np.c_([alpha_list,train_score,test_score,recall_score,precision_score]))
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-53-6d274ef01f50> in <module>()
+----> 1 matrix=np.matrix(np.c_([alpha_list,train_score,test_score,recall_score,precision_score]))
+
+TypeError: 'CClass' object is not callable
+
+In [54]: matrix=np.matrix(np.c_[alpha_list,train_score,test_score,recall_score,precision_score])
+---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+<ipython-input-54-8e3bb5564698> in <module>()
+----> 1 matrix=np.matrix(np.c_[alpha_list,train_score,test_score,recall_score,precision_score])
+
+~/.local/lib/python3.6/site-packages/numpy/lib/index_tricks.py in __getitem__(self, key)
+    338                 objs[k] = objs[k].astype(final_dtype)
+    339 
+--> 340         res = self.concatenate(tuple(objs), axis=axis)
+    341 
+    342         if matrix:
+
+ValueError: all the input array dimensions except for the concatenation axis must match exactly
+
+In [55]: matrix=np.matrix(np.c_[alpha_list,train_score,test_score,recall_score,precision_score])
+---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+<ipython-input-55-8e3bb5564698> in <module>()
+----> 1 matrix=np.matrix(np.c_[alpha_list,train_score,test_score,recall_score,precision_score])
+
+~/.local/lib/python3.6/site-packages/numpy/lib/index_tricks.py in __getitem__(self, key)
+    338                 objs[k] = objs[k].astype(final_dtype)
+    339 
+--> 340         res = self.concatenate(tuple(objs), axis=axis)
+    341 
+    342         if matrix:
+
+ValueError: all the input array dimensions except for the concatenation axis must match exactly
+
+In [56]: for alpha in alpha_list:
+    ...:     model=naive_bayes.MultinomialNB(alpha=alpha)
+    ...:     model.fit(X_train,y_train)
+    ...:     test_score[count]=model.score(X_test,y_test)
+    ...:     train_score[count]=model.score(X_train,y_train)
+    ...:     recall_score[count]=metrics.recall_score(y_test,model.predict(X_test))
+    ...:     precision_score[count]=metrics.recall_score(y_test,model.predict(X_test))
+    ...:     count=count+1
+    ...:     
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-56-0c0fc0acbd05> in <module>()
+      2     model=naive_bayes.MultinomialNB(alpha=alpha)
+      3     model.fit(X_train,y_train)
+----> 4     test_score[count]=model.score(X_test,y_test)
+      5     train_score[count]=model.score(X_train,y_train)
+      6     recall_score[count]=metrics.recall_score(y_test,model.predict(X_test))
+
+TypeError: 'numpy.float64' object does not support item assignment
+
+In [57]: for alpha in alpha_list:
+    ...:     model=naive_bayes.MultinomialNB(alpha=alpha)
+    ...:     model.fit(X_train,y_train)
+    ...:     test_score[count]=model.score(X_test,y_test)
+    ...:     train_score[count]=model.score(X_train,y_train)
+    ...:     count=count+1
+    ...:     
+    ...:     
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-57-9bd48ba45575> in <module>()
+      2     model=naive_bayes.MultinomialNB(alpha=alpha)
+      3     model.fit(X_train,y_train)
+----> 4     test_score[count]=model.score(X_test,y_test)
+      5     train_score[count]=model.score(X_train,y_train)
+      6     count=count+1
+
+TypeError: 'numpy.float64' object does not support item assignment
+
+In [58]: for alpha in alpha_list:
+    ...:     model=naive_bayes.MultinomialNB(alpha=alpha)
+    ...:     model.fit(X_train,y_train)
+    ...:     test_score[count]=model.score(X_test,y_test)
+    ...:     train_score[count]=model.score(X_train,y_train)
+    ...:     count=count+1
+    ...:     
+    ...:     
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-58-9bd48ba45575> in <module>()
+      2     model=naive_bayes.MultinomialNB(alpha=alpha)
+      3     model.fit(X_train,y_train)
+----> 4     test_score[count]=model.score(X_test,y_test)
+      5     train_score[count]=model.score(X_train,y_train)
+      6     count=count+1
+
+TypeError: 'numpy.float64' object does not support item assignment
+
+In [59]: train_score
+Out[59]: 0.9764415526138658
+
+In [60]: train_score=np.zeros(len(alpha_list))
+
+In [61]: test_score=np.zeros(len(alpha_list))
+
+In [62]: recall_score=np.zeros(len(alpha_list))
+
+In [63]: precision_score=np.zeros(len(alpha_list))
+
+In [64]: for alpha in alpha_list:
+    ...:     model=naive_bayes.MultinomialNB(alpha=alpha)
+    ...:     model.fit(X_train,y_train)
+    ...:     test_score[count]=model.score(X_test,y_test)
+    ...:     train_score[count]=model.score(X_train,y_train)
+    ...:     recall_score[count]=metrics.recall_score(y_test,model.predict(X_test))
+    ...:     precision_score[count]=metrics.recall_score(y_test,model.predict(X_test))
+    ...:     count=count+1
+    ...:     
+    ...:     
+
+In [65]: matrix=np.matrix(np.c_[alpha_list,train_score,test_score,recall_score,precision_score])
+
+In [66]: matrix
+Out[66]: 
+matrix([[1.00000000e-05, 9.97083240e-01, 9.81165919e-01, 9.21686747e-01,
+         9.21686747e-01],
+        [1.10010000e-01, 9.95961409e-01, 9.83856502e-01, 9.57831325e-01,
+         9.57831325e-01],
+        [2.20010000e-01, 9.95512677e-01, 9.82062780e-01, 9.63855422e-01,
+         9.63855422e-01],
+        [3.30010000e-01, 9.94839578e-01, 9.81165919e-01, 9.63855422e-01,
+         9.63855422e-01],
+        [4.40010000e-01, 9.94390846e-01, 9.78475336e-01, 9.57831325e-01,
+         9.57831325e-01],
+        [5.50010000e-01, 9.94166480e-01, 9.78475336e-01, 9.57831325e-01,
+         9.57831325e-01],
+        [6.60010000e-01, 9.94166480e-01, 9.77578475e-01, 9.57831325e-01,
+         9.57831325e-01],
+        [7.70010000e-01, 9.94166480e-01, 9.78475336e-01, 9.57831325e-01,
+         9.57831325e-01],
+        [8.80010000e-01, 9.94166480e-01, 9.78475336e-01, 9.57831325e-01,
+         9.57831325e-01],
+        [9.90010000e-01, 9.93942114e-01, 9.78475336e-01, 9.51807229e-01,
+         9.51807229e-01],
+        [1.10001000e+00, 9.93942114e-01, 9.79372197e-01, 9.51807229e-01,
+         9.51807229e-01],
+        [1.21001000e+00, 9.93717747e-01, 9.80269058e-01, 9.51807229e-01,
+         9.51807229e-01],
+        [1.32001000e+00, 9.93942114e-01, 9.82062780e-01, 9.51807229e-01,
+         9.51807229e-01],
+        [1.43001000e+00, 9.93942114e-01, 9.82062780e-01, 9.51807229e-01,
+         9.51807229e-01],
+        [1.54001000e+00, 9.93942114e-01, 9.82062780e-01, 9.51807229e-01,
+         9.51807229e-01],
+        [1.65001000e+00, 9.93942114e-01, 9.82062780e-01, 9.51807229e-01,
+         9.51807229e-01],
+        [1.76001000e+00, 9.93717747e-01, 9.81165919e-01, 9.39759036e-01,
+         9.39759036e-01],
+        [1.87001000e+00, 9.94390846e-01, 9.82062780e-01, 9.39759036e-01,
+         9.39759036e-01],
+        [1.98001000e+00, 9.93942114e-01, 9.82062780e-01, 9.39759036e-01,
+         9.39759036e-01],
+        [2.09001000e+00, 9.93493381e-01, 9.79372197e-01, 9.21686747e-01,
+         9.21686747e-01],
+        [2.20001000e+00, 9.93493381e-01, 9.80269058e-01, 9.21686747e-01,
+         9.21686747e-01],
+        [2.31001000e+00, 9.93269015e-01, 9.80269058e-01, 9.21686747e-01,
+         9.21686747e-01],
+        [2.42001000e+00, 9.93044649e-01, 9.79372197e-01, 9.15662651e-01,
+         9.15662651e-01],
+        [2.53001000e+00, 9.93044649e-01, 9.79372197e-01, 9.15662651e-01,
+         9.15662651e-01],
+        [2.64001000e+00, 9.92820283e-01, 9.80269058e-01, 9.15662651e-01,
+         9.15662651e-01],
+        [2.75001000e+00, 9.92595917e-01, 9.80269058e-01, 9.15662651e-01,
+         9.15662651e-01],
+        [2.86001000e+00, 9.92371550e-01, 9.80269058e-01, 9.15662651e-01,
+         9.15662651e-01],
+        [2.97001000e+00, 9.91922818e-01, 9.80269058e-01, 9.15662651e-01,
+         9.15662651e-01],
+        [3.08001000e+00, 9.91474086e-01, 9.80269058e-01, 9.09638554e-01,
+         9.09638554e-01],
+        [3.19001000e+00, 9.91025353e-01, 9.79372197e-01, 9.03614458e-01,
+         9.03614458e-01],
+        [3.30001000e+00, 9.90800987e-01, 9.78475336e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [3.41001000e+00, 9.90800987e-01, 9.78475336e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [3.52001000e+00, 9.90800987e-01, 9.80269058e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [3.63001000e+00, 9.90800987e-01, 9.81165919e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [3.74001000e+00, 9.90800987e-01, 9.82062780e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [3.85001000e+00, 9.90800987e-01, 9.82062780e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [3.96001000e+00, 9.90352255e-01, 9.82062780e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [4.07001000e+00, 9.90352255e-01, 9.82062780e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [4.18001000e+00, 9.90352255e-01, 9.82062780e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [4.29001000e+00, 9.90576621e-01, 9.82062780e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [4.40001000e+00, 9.90576621e-01, 9.82062780e-01, 8.97590361e-01,
+         8.97590361e-01],
+        [4.51001000e+00, 9.90576621e-01, 9.81165919e-01, 8.91566265e-01,
+         8.91566265e-01],
+        [4.62001000e+00, 9.90352255e-01, 9.80269058e-01, 8.85542169e-01,
+         8.85542169e-01],
+        [4.73001000e+00, 9.90352255e-01, 9.80269058e-01, 8.85542169e-01,
+         8.85542169e-01],
+        [4.84001000e+00, 9.90576621e-01, 9.79372197e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [4.95001000e+00, 9.90576621e-01, 9.79372197e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [5.06001000e+00, 9.90576621e-01, 9.79372197e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [5.17001000e+00, 9.90576621e-01, 9.79372197e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [5.28001000e+00, 9.89903523e-01, 9.79372197e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [5.39001000e+00, 9.89454790e-01, 9.79372197e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [5.50001000e+00, 9.89454790e-01, 9.79372197e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [5.61001000e+00, 9.89454790e-01, 9.79372197e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [5.72001000e+00, 9.89679156e-01, 9.79372197e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [5.83001000e+00, 9.89230424e-01, 9.79372197e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [5.94001000e+00, 9.89230424e-01, 9.80269058e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [6.05001000e+00, 9.89230424e-01, 9.81165919e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [6.16001000e+00, 9.89230424e-01, 9.81165919e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [6.27001000e+00, 9.89230424e-01, 9.81165919e-01, 8.79518072e-01,
+         8.79518072e-01],
+        [6.38001000e+00, 9.88781692e-01, 9.80269058e-01, 8.73493976e-01,
+         8.73493976e-01],
+        [6.49001000e+00, 9.88557326e-01, 9.80269058e-01, 8.73493976e-01,
+         8.73493976e-01],
+        [6.60001000e+00, 9.88557326e-01, 9.80269058e-01, 8.73493976e-01,
+         8.73493976e-01],
+        [6.71001000e+00, 9.88332959e-01, 9.80269058e-01, 8.73493976e-01,
+         8.73493976e-01],
+        [6.82001000e+00, 9.87884227e-01, 9.80269058e-01, 8.73493976e-01,
+         8.73493976e-01],
+        [6.93001000e+00, 9.87884227e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [7.04001000e+00, 9.87659861e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [7.15001000e+00, 9.87659861e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [7.26001000e+00, 9.87659861e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [7.37001000e+00, 9.87435495e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [7.48001000e+00, 9.87435495e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [7.59001000e+00, 9.87435495e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [7.70001000e+00, 9.87211129e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [7.81001000e+00, 9.86986762e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [7.92001000e+00, 9.86762396e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [8.03001000e+00, 9.86762396e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [8.14001000e+00, 9.86762396e-01, 9.79372197e-01, 8.67469880e-01,
+         8.67469880e-01],
+        [8.25001000e+00, 9.86762396e-01, 9.78475336e-01, 8.61445783e-01,
+         8.61445783e-01],
+        [8.36001000e+00, 9.86538030e-01, 9.77578475e-01, 8.55421687e-01,
+         8.55421687e-01],
+        [8.47001000e+00, 9.86538030e-01, 9.77578475e-01, 8.55421687e-01,
+         8.55421687e-01],
+        [8.58001000e+00, 9.86538030e-01, 9.77578475e-01, 8.55421687e-01,
+         8.55421687e-01],
+        [8.69001000e+00, 9.86089298e-01, 9.76681614e-01, 8.49397590e-01,
+         8.49397590e-01],
+        [8.80001000e+00, 9.85864932e-01, 9.76681614e-01, 8.49397590e-01,
+         8.49397590e-01],
+        [8.91001000e+00, 9.85864932e-01, 9.74887892e-01, 8.37349398e-01,
+         8.37349398e-01],
+        [9.02001000e+00, 9.85416199e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [9.13001000e+00, 9.85191833e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [9.24001000e+00, 9.85191833e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [9.35001000e+00, 9.85191833e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [9.46001000e+00, 9.84967467e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [9.57001000e+00, 9.84743101e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [9.68001000e+00, 9.84743101e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [9.79001000e+00, 9.84743101e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [9.90001000e+00, 9.84743101e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [1.00100100e+01, 9.84518735e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [1.01200100e+01, 9.84518735e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [1.02300100e+01, 9.84518735e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [1.03400100e+01, 9.84294368e-01, 9.73991031e-01, 8.31325301e-01,
+         8.31325301e-01],
+        [1.04500100e+01, 9.83845636e-01, 9.73094170e-01, 8.25301205e-01,
+         8.25301205e-01],
+        [1.05600100e+01, 9.83621270e-01, 9.73094170e-01, 8.25301205e-01,
+         8.25301205e-01],
+        [1.06700100e+01, 9.83621270e-01, 9.73094170e-01, 8.25301205e-01,
+         8.25301205e-01],
+        [1.07800100e+01, 9.83396904e-01, 9.73094170e-01, 8.25301205e-01,
+         8.25301205e-01],
+        [1.08900100e+01, 9.83396904e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.10000100e+01, 9.83396904e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.11100100e+01, 9.83396904e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.12200100e+01, 9.83621270e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.13300100e+01, 9.83621270e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.14400100e+01, 9.82948171e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.15500100e+01, 9.82948171e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.16600100e+01, 9.82499439e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.17700100e+01, 9.82275073e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.18800100e+01, 9.82275073e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.19900100e+01, 9.82275073e-01, 9.72197309e-01, 8.19277108e-01,
+         8.19277108e-01],
+        [1.21000100e+01, 9.82275073e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.22100100e+01, 9.82275073e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.23200100e+01, 9.82275073e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.24300100e+01, 9.82050707e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.25400100e+01, 9.82050707e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.26500100e+01, 9.82050707e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.27600100e+01, 9.82050707e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.28700100e+01, 9.81153242e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.29800100e+01, 9.81153242e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.30900100e+01, 9.81153242e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.32000100e+01, 9.81153242e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.33100100e+01, 9.81153242e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.34200100e+01, 9.81153242e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.35300100e+01, 9.80928876e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.36400100e+01, 9.80928876e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.37500100e+01, 9.80928876e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.38600100e+01, 9.80704510e-01, 9.71300448e-01, 8.13253012e-01,
+         8.13253012e-01],
+        [1.39700100e+01, 9.80704510e-01, 9.71300448e-01, 8.07228916e-01,
+         8.07228916e-01],
+        [1.40800100e+01, 9.80704510e-01, 9.70403587e-01, 8.01204819e-01,
+         8.01204819e-01],
+        [1.41900100e+01, 9.80704510e-01, 9.70403587e-01, 8.01204819e-01,
+         8.01204819e-01],
+        [1.43000100e+01, 9.80704510e-01, 9.70403587e-01, 8.01204819e-01,
+         8.01204819e-01],
+        [1.44100100e+01, 9.80704510e-01, 9.70403587e-01, 8.01204819e-01,
+         8.01204819e-01],
+        [1.45200100e+01, 9.80480144e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.46300100e+01, 9.80480144e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.47400100e+01, 9.80255777e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.48500100e+01, 9.80255777e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.49600100e+01, 9.80255777e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.50700100e+01, 9.80255777e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.51800100e+01, 9.80031411e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.52900100e+01, 9.80031411e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.54000100e+01, 9.79807045e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.55100100e+01, 9.79807045e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.56200100e+01, 9.79807045e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.57300100e+01, 9.79807045e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.58400100e+01, 9.79582679e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.59500100e+01, 9.79133947e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.60600100e+01, 9.79133947e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.61700100e+01, 9.79133947e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.62800100e+01, 9.79133947e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.63900100e+01, 9.78909580e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.65000100e+01, 9.78909580e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.66100100e+01, 9.78909580e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.67200100e+01, 9.78685214e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.68300100e+01, 9.78685214e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.69400100e+01, 9.78685214e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.70500100e+01, 9.78685214e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.71600100e+01, 9.78685214e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.72700100e+01, 9.78685214e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.73800100e+01, 9.78685214e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.74900100e+01, 9.78685214e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.76000100e+01, 9.78236482e-01, 9.69506726e-01, 7.95180723e-01,
+         7.95180723e-01],
+        [1.77100100e+01, 9.78012116e-01, 9.68609865e-01, 7.89156627e-01,
+         7.89156627e-01],
+        [1.78200100e+01, 9.77787750e-01, 9.68609865e-01, 7.89156627e-01,
+         7.89156627e-01],
+        [1.79300100e+01, 9.77787750e-01, 9.68609865e-01, 7.89156627e-01,
+         7.89156627e-01],
+        [1.80400100e+01, 9.77563383e-01, 9.68609865e-01, 7.89156627e-01,
+         7.89156627e-01],
+        [1.81500100e+01, 9.77339017e-01, 9.68609865e-01, 7.89156627e-01,
+         7.89156627e-01],
+        [1.82600100e+01, 9.77339017e-01, 9.68609865e-01, 7.89156627e-01,
+         7.89156627e-01],
+        [1.83700100e+01, 9.77339017e-01, 9.68609865e-01, 7.89156627e-01,
+         7.89156627e-01],
+        [1.84800100e+01, 9.77339017e-01, 9.68609865e-01, 7.89156627e-01,
+         7.89156627e-01],
+        [1.85900100e+01, 9.77114651e-01, 9.67713004e-01, 7.83132530e-01,
+         7.83132530e-01],
+        [1.87000100e+01, 9.77114651e-01, 9.67713004e-01, 7.83132530e-01,
+         7.83132530e-01],
+        [1.88100100e+01, 9.77114651e-01, 9.66816143e-01, 7.77108434e-01,
+         7.77108434e-01],
+        [1.89200100e+01, 9.77114651e-01, 9.66816143e-01, 7.77108434e-01,
+         7.77108434e-01],
+        [1.90300100e+01, 9.77114651e-01, 9.66816143e-01, 7.77108434e-01,
+         7.77108434e-01],
+        [1.91400100e+01, 9.77114651e-01, 9.66816143e-01, 7.77108434e-01,
+         7.77108434e-01],
+        [1.92500100e+01, 9.76890285e-01, 9.65919283e-01, 7.71084337e-01,
+         7.71084337e-01],
+        [1.93600100e+01, 9.76665919e-01, 9.65919283e-01, 7.71084337e-01,
+         7.71084337e-01],
+        [1.94700100e+01, 9.76665919e-01, 9.65022422e-01, 7.65060241e-01,
+         7.65060241e-01],
+        [1.95800100e+01, 9.76665919e-01, 9.65022422e-01, 7.65060241e-01,
+         7.65060241e-01],
+        [1.96900100e+01, 9.76665919e-01, 9.65022422e-01, 7.65060241e-01,
+         7.65060241e-01],
+        [1.98000100e+01, 9.76665919e-01, 9.65022422e-01, 7.65060241e-01,
+         7.65060241e-01],
+        [1.99100100e+01, 9.76441553e-01, 9.64125561e-01, 7.59036145e-01,
+         7.59036145e-01]])
+
+In [67]: scores=pd.DataFrame(data=matrix,columns=['alpha','train_score','test_score','recall_score','precision_score'])
+
+In [68]: scores
+Out[68]: 
+        alpha  train_score  test_score  recall_score  precision_score
+0     0.00001     0.997083    0.981166      0.921687         0.921687
+1     0.11001     0.995961    0.983857      0.957831         0.957831
+2     0.22001     0.995513    0.982063      0.963855         0.963855
+3     0.33001     0.994840    0.981166      0.963855         0.963855
+4     0.44001     0.994391    0.978475      0.957831         0.957831
+5     0.55001     0.994166    0.978475      0.957831         0.957831
+6     0.66001     0.994166    0.977578      0.957831         0.957831
+7     0.77001     0.994166    0.978475      0.957831         0.957831
+8     0.88001     0.994166    0.978475      0.957831         0.957831
+9     0.99001     0.993942    0.978475      0.951807         0.951807
+10    1.10001     0.993942    0.979372      0.951807         0.951807
+11    1.21001     0.993718    0.980269      0.951807         0.951807
+12    1.32001     0.993942    0.982063      0.951807         0.951807
+13    1.43001     0.993942    0.982063      0.951807         0.951807
+14    1.54001     0.993942    0.982063      0.951807         0.951807
+15    1.65001     0.993942    0.982063      0.951807         0.951807
+16    1.76001     0.993718    0.981166      0.939759         0.939759
+17    1.87001     0.994391    0.982063      0.939759         0.939759
+18    1.98001     0.993942    0.982063      0.939759         0.939759
+19    2.09001     0.993493    0.979372      0.921687         0.921687
+20    2.20001     0.993493    0.980269      0.921687         0.921687
+21    2.31001     0.993269    0.980269      0.921687         0.921687
+22    2.42001     0.993045    0.979372      0.915663         0.915663
+23    2.53001     0.993045    0.979372      0.915663         0.915663
+24    2.64001     0.992820    0.980269      0.915663         0.915663
+25    2.75001     0.992596    0.980269      0.915663         0.915663
+26    2.86001     0.992372    0.980269      0.915663         0.915663
+27    2.97001     0.991923    0.980269      0.915663         0.915663
+28    3.08001     0.991474    0.980269      0.909639         0.909639
+29    3.19001     0.991025    0.979372      0.903614         0.903614
+..        ...          ...         ...           ...              ...
+152  16.72001     0.978685    0.969507      0.795181         0.795181
+153  16.83001     0.978685    0.969507      0.795181         0.795181
+154  16.94001     0.978685    0.969507      0.795181         0.795181
+155  17.05001     0.978685    0.969507      0.795181         0.795181
+156  17.16001     0.978685    0.969507      0.795181         0.795181
+157  17.27001     0.978685    0.969507      0.795181         0.795181
+158  17.38001     0.978685    0.969507      0.795181         0.795181
+159  17.49001     0.978685    0.969507      0.795181         0.795181
+160  17.60001     0.978236    0.969507      0.795181         0.795181
+161  17.71001     0.978012    0.968610      0.789157         0.789157
+162  17.82001     0.977788    0.968610      0.789157         0.789157
+163  17.93001     0.977788    0.968610      0.789157         0.789157
+164  18.04001     0.977563    0.968610      0.789157         0.789157
+165  18.15001     0.977339    0.968610      0.789157         0.789157
+166  18.26001     0.977339    0.968610      0.789157         0.789157
+167  18.37001     0.977339    0.968610      0.789157         0.789157
+168  18.48001     0.977339    0.968610      0.789157         0.789157
+169  18.59001     0.977115    0.967713      0.783133         0.783133
+170  18.70001     0.977115    0.967713      0.783133         0.783133
+171  18.81001     0.977115    0.966816      0.777108         0.777108
+172  18.92001     0.977115    0.966816      0.777108         0.777108
+173  19.03001     0.977115    0.966816      0.777108         0.777108
+174  19.14001     0.977115    0.966816      0.777108         0.777108
+175  19.25001     0.976890    0.965919      0.771084         0.771084
+176  19.36001     0.976666    0.965919      0.771084         0.771084
+177  19.47001     0.976666    0.965022      0.765060         0.765060
+178  19.58001     0.976666    0.965022      0.765060         0.765060
+179  19.69001     0.976666    0.965022      0.765060         0.765060
+180  19.80001     0.976666    0.965022      0.765060         0.765060
+181  19.91001     0.976442    0.964126      0.759036         0.759036
+
+[182 rows x 5 columns]
+
+In [69]: high=scores['test_score']
+
+In [70]: high.plot()
+Out[70]: <matplotlib.axes._subplots.AxesSubplot at 0x7fba816b0f60>
+
+In [71]: plt.show()
+
+In [72]: high_precision=scores[scores['precision_score']==1]
+
+In [73]: high_precision
+Out[73]: 
+Empty DataFrame
+Columns: [alpha, train_score, test_score, recall_score, precision_score]
+Index: []
+
+In [74]: scores['precision_test'].idxmax()
+---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+~/.local/lib/python3.6/site-packages/pandas/core/indexes/base.py in get_loc(self, key, method, tolerance)
+   3077             try:
+-> 3078                 return self._engine.get_loc(key)
+   3079             except KeyError:
+
+pandas/_libs/index.pyx in pandas._libs.index.IndexEngine.get_loc()
+
+pandas/_libs/index.pyx in pandas._libs.index.IndexEngine.get_loc()
+
+pandas/_libs/hashtable_class_helper.pxi in pandas._libs.hashtable.PyObjectHashTable.get_item()
+
+pandas/_libs/hashtable_class_helper.pxi in pandas._libs.hashtable.PyObjectHashTable.get_item()
+
+KeyError: 'precision_test'
+
+During handling of the above exception, another exception occurred:
+
+KeyError                                  Traceback (most recent call last)
+<ipython-input-74-b083d56091c6> in <module>()
+----> 1 scores['precision_test'].idxmax()
+
+~/.local/lib/python3.6/site-packages/pandas/core/frame.py in __getitem__(self, key)
+   2686             return self._getitem_multilevel(key)
+   2687         else:
+-> 2688             return self._getitem_column(key)
+   2689 
+   2690     def _getitem_column(self, key):
+
+~/.local/lib/python3.6/site-packages/pandas/core/frame.py in _getitem_column(self, key)
+   2693         # get column
+   2694         if self.columns.is_unique:
+-> 2695             return self._get_item_cache(key)
+   2696 
+   2697         # duplicate columns & possible reduce dimensionality
+
+~/.local/lib/python3.6/site-packages/pandas/core/generic.py in _get_item_cache(self, item)
+   2487         res = cache.get(item)
+   2488         if res is None:
+-> 2489             values = self._data.get(item)
+   2490             res = self._box_item_values(item, values)
+   2491             cache[item] = res
+
+~/.local/lib/python3.6/site-packages/pandas/core/internals.py in get(self, item, fastpath)
+   4113 
+   4114             if not isna(item):
+-> 4115                 loc = self.items.get_loc(item)
+   4116             else:
+   4117                 indexer = np.arange(len(self.items))[isna(self.items)]
+
+~/.local/lib/python3.6/site-packages/pandas/core/indexes/base.py in get_loc(self, key, method, tolerance)
+   3078                 return self._engine.get_loc(key)
+   3079             except KeyError:
+-> 3080                 return self._engine.get_loc(self._maybe_cast_indexer(key))
+   3081 
+   3082         indexer = self.get_indexer([key], method=method, tolerance=tolerance)
+
+pandas/_libs/index.pyx in pandas._libs.index.IndexEngine.get_loc()
+
+pandas/_libs/index.pyx in pandas._libs.index.IndexEngine.get_loc()
+
+pandas/_libs/hashtable_class_helper.pxi in pandas._libs.hashtable.PyObjectHashTable.get_item()
+
+pandas/_libs/hashtable_class_helper.pxi in pandas._libs.hashtable.PyObjectHashTable.get_item()
+
+KeyError: 'precision_test'
+
+In [75]: scores['precision_score'].idxmax()
+Out[75]: 2
+
+In [76]: scores.iloc[2,:]
+Out[76]: 
+alpha              0.220010
+train_score        0.995513
+test_score         0.982063
+recall_score       0.963855
+precision_score    0.963855
+Name: 2, dtype: float64
+
+In [77]: scores[scores['precision_score']==1]
+Out[77]: 
+Empty DataFrame
+Columns: [alpha, train_score, test_score, recall_score, precision_score]
+Index: []
+
+In [78]: model=naive_bayes.MultinomialNB(alpha=0.220010)
+
+In [79]: model.fit(X_train,y_train)
+Out[79]: MultinomialNB(alpha=0.22001, class_prior=None, fit_prior=True)
+
+In [80]: y_test=model.predict(X_test)
+
+In [81]: y_model=model.predict(X_test)
+
+In [82]: X_train,X_test,y_train,y_test=train_test_split(X,data['v1'].map({'ham':0,'spam':1}),random_state=0,test_size=0.2)
+
+In [83]: model.score(y_model,y_test)
+
